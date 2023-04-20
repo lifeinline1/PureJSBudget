@@ -9,8 +9,10 @@ const expenseTable = document.getElementById("table-expense");
 const incomeTableBody = document.getElementById("table-income-body");
 const expenseTableBody = document.getElementById("table-expense-body");
 
-const incomeList = [];
-const expenseList = [];
+const entryList = [];
+
+var incId = 0;
+var expId = 0;
 
 budgetForm.addEventListener("submit", (event) => addBudget(event));
 
@@ -21,33 +23,48 @@ function addBudget(e) {
 
   if (type == "income") {
     let income = {
+      id: incId++,
       title: budgetTitle.value,
       amount: +budgetAmount.value,
       type: type,
     };
-    incomeList.push(income);
+    entryList.push(income);
     addIncomeToTable(income);
   }
   if (type == "expense") {
     let expense = {
+      id: expId++,
       title: budgetTitle.value,
       amount: +budgetAmount.value,
       type: type,
     };
-    expenseList.push(expense);
+    entryList.push(expense);
+    addExpenseToTable(expense);
   }
 }
 
 function addIncomeToTable(obj) {
-  let row = incomeTableBody.insertRow(-1);
+  let row = incomeTableBody.insertRow(0);
   let titleCell = row.insertCell(0);
   let amountCell = row.insertCell(1);
   let buttonsCell = row.insertCell(2);
 
   titleCell.innerHTML = obj.title;
   amountCell.innerHTML = obj.amount;
-  buttonsCell.innerHTML = `<button onclick="editIncome(${1})" id="table-income-edit-button">Edit</button>
-  <button onclick="deleteIncome(${1})" id="table-income-edit-button">Delete</button>`;
+  buttonsCell.innerHTML = `<button onclick="editIncome(${obj["id"]})" id="table-income-edit-button">Edit</button>
+  <button onclick="deleteIncome(${obj["id"]})" id="table-income-edit-button">Delete</button>`;
+}
+
+function addExpenseToTable(obj) {
+  let row = expenseTableBody.insertRow(0);
+  let titleCell = row.insertCell(0);
+  let amountCell = row.insertCell(1);
+  let buttonsCell = row.insertCell(2);
+
+  titleCell.innerHTML = obj.title;
+  amountCell.innerHTML = obj.amount;
+  buttonsCell.innerHTML = `<button onclick="editIncome(${obj["id"]})" id="table-income-edit-button">Edit</button>
+    <button onclick="deleteIncome(${obj["id"]})" id="table-income-edit-button">Delete</button>`;
 }
 
 function editIncome(num) {
